@@ -151,7 +151,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                     height: 400.0,
                     width: 300.0,
                     child: Carousel(
-                      boxFit: BoxFit.cover,
+                      boxFit: BoxFit.contain,
                       autoplay: false,
                       animationCurve: Curves.fastOutSlowIn,
                       animationDuration: Duration(milliseconds: 1000),
