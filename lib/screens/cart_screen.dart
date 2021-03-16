@@ -30,7 +30,7 @@ class CartScreen extends StatelessWidget {
                       'Cумма',
                       style: TextStyle(fontSize: 16),
                     ),
-                    Spacer(),
+                    // Spacer(),
                     Chip(
                       label: Consumer<Cart>(
                         builder: (_, cart, ch) => Text(
@@ -116,8 +116,8 @@ class _OrderButtonState extends State<OrderButton> {
   @override
   Widget build(BuildContext context) {
     final cart = Provider.of<Cart>(context);
-    print(cart.itemCount);
     return FlatButton(
+      padding: EdgeInsets.all(1.0),
       child: _isLoading ? CircularProgressIndicator() : Text('ЗАКАЗАТЬ СЕЙЧАС'),
       onPressed: (widget.cart.totalAmount <= 0 || _isLoading)
           ? null
@@ -139,11 +139,14 @@ class _OrderButtonState extends State<OrderButton> {
                         "alemid": value.id,
                         "name": value.title,
                         "quantity": value.quantity,
+                        "quantities": value.quantityList.toList(),
+                        "price": value.price,
                         "user": value.user,
                         "color": value.colorList.toList(),
                         "date": DateTime.now().toString(),
                         "inProcess": false,
                         "completed": false,
+                        "imgUrl": value.imgUrl,
                       });
 
                       FirebaseFirestore.instance
@@ -161,21 +164,6 @@ class _OrderButtonState extends State<OrderButton> {
               );
               showAlertDialog(context, "Завершение заказа",
                   "Вы действительно хотите завершить заказ!");
-//               AlertDialog alertNotLogged = AlertDialog(
-//                 title: Text("Завершение заказа"),
-//                 content: SingleChildScrollView(
-//                     child: Text("Вы действительно хотите завершить заказ!")),
-//                 actions: [
-//                   okButton,
-//                 ],
-//               );
-// // show the dialog
-//               showDialog(
-//                 context: context,
-//                 builder: (BuildContext context) {
-//                   return alertNotLogged;
-//                 },
-//               );
               // set up the AlertDialog
               AlertDialog alert = AlertDialog(
                 title: Text("Завершение заказа"),

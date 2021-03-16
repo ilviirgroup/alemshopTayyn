@@ -1,10 +1,14 @@
 import 'package:alemshop/models/cart.dart';
 import 'package:alemshop/screens/login_and_regis/Regis_page.dart';
+import 'package:alemshop/screens/product_detail/gallery_page.dart';
 import 'package:carousel_pro/carousel_pro.dart';
+import 'package:carousel_slider/carousel_options.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:photo_view/photo_view.dart';
+import 'package:photo_view/photo_view_gallery.dart';
 import 'package:provider/provider.dart';
 import 'package:alemshop/models/show_alert_dialog.dart';
 
@@ -49,6 +53,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
 
   Set<String> selSize = {};
   Set<String> selColor = {};
+  Set<String> quantityList = {};
   List<ProductListTile> colorList;
   List<ProductListTile> sizeList;
 
@@ -113,12 +118,15 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
     return SafeArea(
       child: Scaffold(
           appBar: AppBar(
-            title: Text('Products'),
+            title: Text('Товары'),
             actions: <Widget>[
               RaisedButton(
                 color: Colors.amber,
                 onPressed: () {
                   if (user.currentUser != null) {
+                    setState(() {
+                      quantityList.add(counter.toString());
+                    });
                     cart.addItem(
                       orderId,
                       '${widget.alemid}',
@@ -129,6 +137,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                       '${user.currentUser.phoneNumber}',
                       selColor,
                       selSize,
+                      quantityList,
                     );
 
                     _showalert.showAlertDialog(
@@ -150,18 +159,26 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                   SizedBox(
                     height: 400.0,
                     width: 300.0,
-                    child: Carousel(
-                      boxFit: BoxFit.contain,
-                      autoplay: false,
-                      animationCurve: Curves.fastOutSlowIn,
-                      animationDuration: Duration(milliseconds: 1000),
-                      dotIncreasedColor: Color(0xFFFF335C),
-                      dotBgColor: Colors.transparent,
-                      dotPosition: DotPosition.bottomCenter,
-                      dotVerticalPadding: 10.0,
-                      showIndicator: true,
-                      indicatorBgPadding: 7.0,
-                      images: (urls != null) ? urls : [''],
+                    child: GestureDetector(
+                      child: Carousel(
+                        boxFit: BoxFit.contain,
+                        autoplay: false,
+                        animationCurve: Curves.fastOutSlowIn,
+                        animationDuration: Duration(milliseconds: 1000),
+                        dotIncreasedColor: Color(0xFFFF335C),
+                        dotBgColor: Colors.transparent,
+                        dotPosition: DotPosition.bottomCenter,
+                        dotVerticalPadding: 10.0,
+                        showIndicator: true,
+                        indicatorBgPadding: 7.0,
+                        images: (urls != null) ? urls : [''],
+                        onImageTap: (imageIndex) {
+                          Navigator.of(context).push(new MaterialPageRoute(
+                              builder: (context) => GalleryPage(
+                                    urls: urls,
+                                  )));
+                        },
+                      ),
                     ),
                   ),
                   Divider(

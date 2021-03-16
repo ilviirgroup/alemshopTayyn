@@ -1,12 +1,11 @@
-import 'package:alemshop/models/filter.dart';
 import 'package:alemshop/screens/contacts/about_us.dart';
 import 'package:alemshop/screens/contacts/contacts.dart';
 import 'package:alemshop/screens/home_screen.dart';
+import 'package:alemshop/screens/my_orders/my_ordersScreen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:animated_text_kit/animated_text_kit.dart';
-import 'package:provider/provider.dart';
 
 final user = FirebaseAuth.instance;
 final _firestore = FirebaseFirestore.instance;
@@ -138,6 +137,7 @@ class _AppDrawerState extends State<AppDrawer> {
               title:
                   Text('О нас', style: TextStyle(fontWeight: FontWeight.w600)),
               leading: Icon(Icons.info_rounded)),
+
           ListTile(
               onTap: () {
                 Navigator.pop(context);
@@ -149,6 +149,16 @@ class _AppDrawerState extends State<AppDrawer> {
               title: Text('Контакты',
                   style: TextStyle(fontWeight: FontWeight.w600)),
               leading: Icon(Icons.email)),
+          ListTile(
+            onTap: () {
+              Navigator.pop(context);
+              Navigator.push(
+                  context, MaterialPageRoute(builder: (context) => MyOrders()));
+            },
+            title: Text('Мои заказы',
+                style: TextStyle(fontWeight: FontWeight.w600)),
+            leading: Icon(Icons.shop),
+          ),
           ListTile(
               onTap: () {
                 Navigator.pop(context);

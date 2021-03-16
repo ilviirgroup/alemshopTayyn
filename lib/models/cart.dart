@@ -10,6 +10,7 @@ class CartItem {
   final String imgUrl;
   final Set colorList;
   final Set sizeList;
+  final Set quantityList;
 
   CartItem({
     @required this.orderId,
@@ -21,6 +22,7 @@ class CartItem {
     @required this.imgUrl,
     @required this.colorList,
     @required this.sizeList,
+    @required this.quantityList,
   });
 }
 
@@ -53,22 +55,41 @@ class Cart with ChangeNotifier {
     String user,
     Set colorList,
     Set sizeList,
+    Set quantityList,
   ) {
     if (_items.containsKey(productId)) {
       // change quantity...
-      _items.update(
-        productId,
-        (existingCartItem) => CartItem(
-            orderId: existingCartItem.orderId,
-            id: existingCartItem.id,
-            title: existingCartItem.title,
-            price: existingCartItem.price,
-            quantity: existingCartItem.quantity + 1,
-            imgUrl: existingCartItem.imgUrl,
-            user: existingCartItem.user,
-            colorList: existingCartItem.colorList,
-            sizeList: existingCartItem.sizeList),
-      );
+      _items.update(productId, (existingCartItem) {
+        for (var color in colorList) {
+          existingCartItem.colorList.add(color);
+        }
+        for (var size in sizeList) {
+          existingCartItem.sizeList.add(size);
+        }
+        for (var quantities in quantityList) {
+          if (quantities == existingCartItem.quantityList) {
+            existingCartItem.quantityList.add(existingCartItem.quantityList);
+          } else {
+            existingCartItem.quantityList.add(quantities);
+          }
+        }
+        print(existingCartItem.colorList);
+        print(existingCartItem.sizeList);
+        print(existingCartItem.quantityList);
+
+        return CartItem(
+          orderId: existingCartItem.orderId,
+          id: existingCartItem.id,
+          title: existingCartItem.title,
+          price: existingCartItem.price,
+          quantity: existingCartItem.quantity + quantity,
+          imgUrl: existingCartItem.imgUrl,
+          user: existingCartItem.user,
+          colorList: existingCartItem.colorList,
+          sizeList: existingCartItem.sizeList,
+          quantityList: existingCartItem.quantityList,
+        );
+      });
     } else {
       _items.putIfAbsent(
         productId,
@@ -81,7 +102,8 @@ class Cart with ChangeNotifier {
             imgUrl: imgUrl,
             user: user,
             colorList: colorList,
-            sizeList: sizeList),
+            sizeList: sizeList,
+            quantityList: quantityList),
       );
     }
     notifyListeners();
@@ -108,7 +130,8 @@ class Cart with ChangeNotifier {
               imgUrl: existingCartItem.imgUrl,
               user: existingCartItem.user,
               sizeList: existingCartItem.sizeList,
-              colorList: existingCartItem.colorList));
+              colorList: existingCartItem.colorList,
+              quantityList: existingCartItem.quantityList));
     } else {
       _items.remove(productId);
     }
